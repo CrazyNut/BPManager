@@ -1,4 +1,8 @@
+using System.Reflection;
+using API.Abstractions;
+using API.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -6,6 +10,11 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
+    private readonly ApplicationContext applicationContext;
+    public WeatherForecastController(ApplicationContext applicationContext)
+    {
+        this.applicationContext = applicationContext;
+    }
     private static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -29,4 +38,27 @@ public class WeatherForecastController : ControllerBase
         })
         .ToArray();
     }
+
+    [HttpGet("getAbstracts")]
+    public string GetAbstracts()
+    {
+        
+
+
+
+        // Type[] types = GetInheritedClasses(typeof(BaseProcessElement));
+        // List<BaseProcessElement> list = new List<BaseProcessElement>();
+        // BaseProcessElement? baseProcessElementE = (BaseProcessElement?)Activator.CreateInstance(types[0]);
+        // if(baseProcessElementE != null)
+        //     list.Add(baseProcessElementE);
+        // return list[0].Execute().ToString();
+    }
+
+    Type[] GetInheritedClasses(Type MyType) 
+    {
+        //if you want the abstract classes drop the !TheType.IsAbstract but it is probably to instance so its a good idea to keep it.
+        return Assembly.GetAssembly(MyType).GetTypes().Where(TheType => TheType.IsClass && !TheType.IsAbstract && TheType.IsSubclassOf(MyType)).ToArray();
+    }
+
+    
 }
