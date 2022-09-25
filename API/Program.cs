@@ -1,11 +1,15 @@
 using API.Data;
 using API.Helpers;
+using API.Interfaces;
+using API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
+builder.Services.AddScoped<IProcessElementTypesService, ProcessElementTypesService>();
+builder.Services.AddScoped<IProcessSampleRepository, ProcessSampleRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {

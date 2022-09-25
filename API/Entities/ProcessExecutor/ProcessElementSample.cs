@@ -8,9 +8,10 @@ namespace API.Entities.ProcessExecutor
 {
     public class ProcessElementSample : BaseEntity
     {
+        public ProcessSample Process {get;set;}
         public Type ProcessElementInstanseType {get;set;}
-        public List<ProcessParam> ProcessElementParams {get;set;}
-        public List<ProcessElementConnection> OutConnections {get;set;}
-        public List<ProcessElementConnection> InConnections {get;set;}
+        public List<ProcessParam>? ProcessElementParams {get;set;}
+        public List<ProcessElementConnection>? OutConnections {get;set;}
+        public List<ProcessElementConnection>? InConnections {get;set;}
     }
 }

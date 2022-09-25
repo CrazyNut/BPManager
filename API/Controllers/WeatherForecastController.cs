@@ -1,6 +1,8 @@
 using System.Reflection;
+using System.Text.Json;
 using API.Abstractions;
 using API.Data;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,21 +12,18 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private readonly ApplicationContext applicationContext;
-    public WeatherForecastController(ApplicationContext applicationContext)
-    {
-        this.applicationContext = applicationContext;
-    }
     private static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly IProcessElementTypesService processElementTypesService;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IProcessElementTypesService processElementTypesService)
     {
         _logger = logger;
+        this.processElementTypesService = processElementTypesService;
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
@@ -40,10 +39,11 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpGet("getAbstracts")]
-    public string GetAbstracts()
+    public ActionResult<string> GetAbstracts()
     {
-        
-
+        Dictionary<Type,string?> types = processElementTypesService.GetProcessElementTypes();
+        string s = JsonSerializer.Serialize(types.Values.ToArray());
+        return s;
 
 
         // Type[] types = GetInheritedClasses(typeof(BaseProcessElement));

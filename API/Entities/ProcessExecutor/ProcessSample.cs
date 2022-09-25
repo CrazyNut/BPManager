@@ -8,6 +8,7 @@ namespace API.Entities.ProcessExecutor
 {
     public class ProcessSample : BaseEntity
     {
-        public List<ProcessParam> ProcessParams{get;set;} 
+        public List<ProcessElementSample>? ProcessElements {get;set;}
+        public List<ProcessParam>? ProcessParams{get;set;} 
     }
 }

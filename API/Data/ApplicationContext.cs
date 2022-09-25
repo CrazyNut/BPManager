@@ -16,6 +16,7 @@ namespace API.Data
 
         public ApplicationContext(DbContextOptions options) : base(options)
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

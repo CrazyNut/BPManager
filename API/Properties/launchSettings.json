@@ -12,7 +12,8 @@
     "API": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
+      "requireExactSource": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:4201;http://localhost:4202",
       "environmentVariables": {
