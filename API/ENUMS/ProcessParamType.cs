@@ -6,5 +6,6 @@ namespace API.ENUMS
         intParam,
         doubleParam,
         boolParam,
+        conditionParam,
     }
 }

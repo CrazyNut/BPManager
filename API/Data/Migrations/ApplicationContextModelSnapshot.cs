@@ -17,23 +17,26 @@ namespace API.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
 
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementConnection", b =>
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementConnectionEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Condition")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("InElementId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("InElementId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsMain")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("OutElementId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("OutElementId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProcessId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -41,52 +44,67 @@ namespace API.Data.Migrations
 
                     b.HasIndex("OutElementId");
 
-                    b.ToTable("ProcessElementConnections");
+                    b.HasIndex("ProcessId");
+
+                    b.ToTable("ProcessConnections");
                 });
 
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementSample", b =>
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProcessElementInstanseType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ProcessId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ProcessId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProcessId");
 
-                    b.ToTable("ProcessElementSamples");
+                    b.ToTable("ProcessElements");
                 });
 
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessParam", b =>
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessEntity", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Code")
-                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Processes");
+                });
+
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessParamEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Condition")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ParamRouteType")
@@ -95,19 +113,19 @@ namespace API.Data.Migrations
                     b.Property<int>("ParamType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ProcessElementSampleId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ProcessSampleId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool?>("boolParam")
+                    b.Property<int?>("ProcessElementEntityId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double?>("doubleParam")
+                    b.Property<int?>("ProcessEntityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("boolParam")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("doubleParam")
                         .HasColumnType("REAL");
 
-                    b.Property<int?>("intParam")
+                    b.Property<int>("intParam")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("stringParam")
@@ -115,54 +133,39 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProcessElementSampleId");
+                    b.HasIndex("ProcessElementEntityId");
 
-                    b.HasIndex("ProcessSampleId");
+                    b.HasIndex("ProcessEntityId");
 
-                    b.ToTable("ProcessParam");
+                    b.ToTable("ProcessParamEntity");
                 });
 
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessSample", b =>
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementConnectionEntity", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProcessSamples");
-                });
-
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementConnection", b =>
-                {
-                    b.HasOne("API.Entities.ProcessExecutor.ProcessElementSample", "InElement")
+                    b.HasOne("API.Entities.ProcessExecutor.ProcessElementEntity", "InElement")
                         .WithMany("InConnections")
-                        .HasForeignKey("InElementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InElementId");
 
-                    b.HasOne("API.Entities.ProcessExecutor.ProcessElementSample", "OutElement")
+                    b.HasOne("API.Entities.ProcessExecutor.ProcessElementEntity", "OutElement")
                         .WithMany("OutConnections")
-                        .HasForeignKey("OutElementId")
+                        .HasForeignKey("OutElementId");
+
+                    b.HasOne("API.Entities.ProcessExecutor.ProcessEntity", "Process")
+                        .WithMany("ProcessElementsConnections")
+                        .HasForeignKey("ProcessId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("InElement");
 
                     b.Navigation("OutElement");
+
+                    b.Navigation("Process");
                 });
 
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementSample", b =>
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementEntity", b =>
                 {
-                    b.HasOne("API.Entities.ProcessExecutor.ProcessSample", "Process")
+                    b.HasOne("API.Entities.ProcessExecutor.ProcessEntity", "Process")
                         .WithMany("ProcessElements")
                         .HasForeignKey("ProcessId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -171,18 +174,18 @@ namespace API.Data.Migrations
                     b.Navigation("Process");
                 });
 
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessParam", b =>
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessParamEntity", b =>
                 {
-                    b.HasOne("API.Entities.ProcessExecutor.ProcessElementSample", null)
+                    b.HasOne("API.Entities.ProcessExecutor.ProcessElementEntity", null)
                         .WithMany("ProcessElementParams")
-                        .HasForeignKey("ProcessElementSampleId");
+                        .HasForeignKey("ProcessElementEntityId");
 
-                    b.HasOne("API.Entities.ProcessExecutor.ProcessSample", null)
+                    b.HasOne("API.Entities.ProcessExecutor.ProcessEntity", null)
                         .WithMany("ProcessParams")
-                        .HasForeignKey("ProcessSampleId");
+                        .HasForeignKey("ProcessEntityId");
                 });
 
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementSample", b =>
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessElementEntity", b =>
                 {
                     b.Navigation("InConnections");
 
@@ -191,9 +194,11 @@ namespace API.Data.Migrations
                     b.Navigation("ProcessElementParams");
                 });
 
-            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessSample", b =>
+            modelBuilder.Entity("API.Entities.ProcessExecutor.ProcessEntity", b =>
                 {
                     b.Navigation("ProcessElements");
+
+                    b.Navigation("ProcessElementsConnections");
 
                     b.Navigation("ProcessParams");
                 });

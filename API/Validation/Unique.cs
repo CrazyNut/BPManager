@@ -6,9 +6,8 @@ using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Threading.Tasks;
 using API.Data;
-using API.Entities.ProcessExecutor;
+using API.Entities;
 using API.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
 namespace API.Validation
@@ -27,7 +26,7 @@ namespace API.Validation
 
         private ValidationResult DirectlyValid(object value, ValidationContext validationContext)
         {
-           ApplicationContext? applicationContext = (ApplicationContext?)validationContext
+           ApplicationContext applicationContext = (ApplicationContext)validationContext
                          .GetService(typeof(ApplicationContext));
 
                 // var ttt=validationContext.ObjectInstance.GetType().GetProperties();
@@ -40,9 +39,9 @@ namespace API.Validation
                 //     var t2 = t.AttributeType;
                 //    }
                 // }
-                PropertyInfo IdProp = validationContext.ObjectInstance.GetType().GetProperties().FirstOrDefault(x => x.Name.ToLower().Contains("id") || x.CustomAttributes.Count(a => a.AttributeType == typeof(KeyAttribute)) > 0);
+                PropertyInfo IdProp = validationContext.ObjectInstance.GetType().GetProperties().FirstOrDefault(x => x.Name.ToLower().Contains("id") || x.CustomAttributes.Any(a => a.AttributeType == typeof(KeyAttribute)));
 
-                Guid? Id = IdProp == null ? null : (Guid)IdProp.GetValue(validationContext.ObjectInstance, null);
+                int? Id = IdProp == null ? null : (int)IdProp.GetValue(validationContext.ObjectInstance, null);
                 
                 Type entityType = validationContext.ObjectType;
                 bool result = (bool)typeof(Unique)
@@ -50,18 +49,18 @@ namespace API.Validation
                     .MakeGenericMethod(TargetModelType)
                     .Invoke(this, new object[] { Id, TargetPropertyName, value, applicationContext });
                 
-                if (result)
+                if (!result)
                     return ValidationResult.Success;
                 else
                     return new ValidationResult(ErrorMessageString);
 
         }
-        public bool CheckUniqueParam<T>(Guid? modelId, string paramName, string paramValue, ApplicationContext applicationContext) where T : BaseEntity
+        public bool CheckUniqueParam<T>(int? modelId, string paramName, string paramValue, ApplicationContext applicationContext) where T : BaseEntity
         {
             var query = applicationContext.Set<T>().Where(paramName + "==@0", paramValue);
             if(modelId != null)
                 query = query.Where(m => m.Id != modelId);
-            return query.Count() == 0;
+            return query.Any();
         }
     }
 }

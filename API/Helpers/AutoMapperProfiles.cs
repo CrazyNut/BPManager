@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTO;
-using API.Entities.ProcessExecutor;
+using API.Entities;
+using API.Interfaces;
+using API.Services;
 using AutoMapper;
+using API.ProcessInstance.Objects;
 
 namespace API.Helpers
 {
@@ -12,28 +15,30 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
-            // CreateMap<AppUser, MemberDTO>()
-            // .ForMember(
-            //     dest => dest.PhotoUrl, 
-            //     opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url)
-            // )
-            // .ForMember(
-            //     dest => dest.Age, 
-            //     opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge())
-            // );
-             CreateMap<ProcessElementSample, ProcessElementSampleDTO>()
-             .ForMember(
-                dest => dest.ProcessElementInstanseType,
-                opt => opt.MapFrom(src => src.ProcessElementInstanseType.AssemblyQualifiedName)
-             );
-             CreateMap<ProcessElementSampleDTO,ProcessElementSample>()
-             .ForMember(
-                dest => dest.ProcessElementInstanseType,
-                opt => opt.MapFrom(src => Type.GetType(src.ProcessElementInstanseType))
-             );
-             CreateMap<ProcessSample, ProcessSampleDTO>().ReverseMap();
-             CreateMap<ProcessElementConnection, ProcessElementConnectionDTO>().ReverseMap();
-             CreateMap<ProcessParam, ProcessParamDTO>().ReverseMap();
+            Dictionary<string, string> types = ProcessElementTypesService.GetTypes();
+            CreateMap<ProcessElementEntity, ProcessElementDTO>()
+                 .ForMember(
+                    dest => dest.ProcessElementInstanseType,
+                    opt => opt.MapFrom(src => src.ProcessElementInstanseType.Name)
+                 );
+            CreateMap<ProcessElementDTO,ProcessElementEntity>()
+                 .ForMember(
+                    dest => dest.ProcessElementInstanseType,
+                    opt => opt.MapFrom(src => Type.GetType(types[src.ProcessElementInstanseType]))
+                 );
+            CreateMap<ProcessEntity, ProcessDTO>();
+            CreateMap<ProcessDTO, ProcessEntity>()
+                .ForMember(
+                dest => dest.ProcessElementsConnections,
+                src => src.Ignore()
+                )
+                .ForMember(
+                dest => dest.ProcessElements,
+                src => src.Ignore()
+                );
+            CreateMap<ProcessElementConnectionEntity, ProcessElementConnectionDTO>().ReverseMap();
+            CreateMap<ProcessParamEntity, ProcessParamDTO>().ReverseMap();
+            CreateMap<ProcessParam, ProcessParamEntity>().ReverseMap();
             // CreateMap<MemberUpdateDTO, AppUser>();
         }
     }

@@ -1,0 +1,12 @@
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\bin\Debug\net6.0\ProcessExecutor.deps.json
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\bin\Debug\net6.0\ProcessExecutor.dll
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\bin\Debug\net6.0\ProcessExecutor.pdb
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\ProcessExecutor.csproj.AssemblyReference.cache
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\ProcessExecutor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\ProcessExecutor.AssemblyInfoInputs.cache
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\ProcessExecutor.AssemblyInfo.cs
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\ProcessExecutor.csproj.CoreCompileInputs.cache
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\ProcessExecutor.dll
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\refint\ProcessExecutor.dll
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\ProcessExecutor.pdb
+C:\Users\Asus\source\repos\BPManager\ProcessExecutor\obj\Debug\net6.0\ref\ProcessExecutor.dll

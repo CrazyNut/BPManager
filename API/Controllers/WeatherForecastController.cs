@@ -1,16 +1,12 @@
 using System.Reflection;
 using System.Text.Json;
-using API.Abstractions;
-using API.Data;
-using API.Interfaces;
+using API.ProcessExecutor.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class WeatherForecastController : BaseContoller
 {
     private static readonly string[] Summaries = new[]
     {
@@ -26,7 +22,7 @@ public class WeatherForecastController : ControllerBase
         this.processElementTypesService = processElementTypesService;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
+    [HttpGet("GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -41,8 +37,8 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("getAbstracts")]
     public ActionResult<string> GetAbstracts()
     {
-        Dictionary<Type,string?> types = processElementTypesService.GetProcessElementTypes();
-        string s = JsonSerializer.Serialize(types.Values.ToArray());
+        Dictionary<string,string> types = processElementTypesService.GetProcessElementTypes();
+        string s = JsonSerializer.Serialize(types);
         return s;
 
 

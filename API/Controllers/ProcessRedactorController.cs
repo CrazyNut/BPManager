@@ -1,100 +1,72 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Data;
+using API.ProcessExecutor.Interfaces;
 using API.DTO;
-using API.Entities.ProcessExecutor;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/processes")]
-    public class ProcessRedactorController : ControllerBase
+    public class ProcessRedactorController : BaseContoller
     {
-        private readonly IProcessSampleRepository processSampleRepository;
-        private readonly IMapper mapper;
-        private readonly IProcessElementTypesService processElementTypesService;
+        private readonly IEntityService<ProcessDTO> _processEntityService;
+        private readonly IProcessElementTypesService _processElementTypesService;
+        private readonly IProcessExecutorService _processExecutorService;
 
-        public ProcessRedactorController(IProcessSampleRepository processSampleRepository, IMapper mapper,IProcessElementTypesService processElementTypesService)
+        public ProcessRedactorController(
+            IEntityService<ProcessDTO> processEntityService,
+            IProcessElementTypesService processElementTypesService,
+            IProcessExecutorService processExecutorService)
         {
-            this.processSampleRepository = processSampleRepository;
-            this.mapper = mapper;
-            this.processElementTypesService = processElementTypesService;
+            _processEntityService = processEntityService;
+            _processElementTypesService = processElementTypesService;
+            _processExecutorService = processExecutorService;
+        }
+
+        [HttpGet("types")]
+        public IEnumerable<string> GetProcessElementTypes()
+        {
+            return _processElementTypesService.GetProcessElementTypes().Keys.ToArray();
+        }
+
+        [HttpGet("typeParams")]
+        public Dictionary<string, List<ProcessParamDTO>> GetProcessElementsParams()
+        {
+            return _processElementTypesService.GetProcessElementsParamets();
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResponceDTO<IEnumerable<ProcessSampleDTO>>>> GetAllProcessSamples()
+        public async Task<IEnumerable<ProcessDTO>> GetProcesses()
         {
-            return new ResponceDTO<IEnumerable<ProcessSampleDTO>>
-            {
-                 code = 200,
-                result = "success",
-                resultObject = await processSampleRepository.GetProcessSampleDTOsAsync()
-            };
+            return await _processEntityService.GetAllAsync();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ProcessDTO> GetProcessById(int id)
+        {
+            return await _processEntityService.GetAsync(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponceDTO<ProcessSampleDTO>>> AddProcessSample(ProcessSampleDTO sample)
+        public async Task<ProcessDTO> AddProcess(ProcessDTO process)
         {
-            ProcessSample processSample = mapper.Map<ProcessSample>(sample);
-            processSampleRepository.Create(processSample);
-            if(await processSampleRepository.SaveAllAsync())
-            {
-                sample.Id = processSample.Id;
-                return new ResponceDTO<ProcessSampleDTO>
-                {
-                    code = 200,
-                    result = "success",
-                    resultObject = sample
-                };
-            }
-            return new ResponceDTO<ProcessSampleDTO>
-                {
-                    code = 500,
-                    result = "error occured during saving",
-                    resultObject = sample
-                };
-        }
-        
-        [HttpPut]
-        public async Task<ActionResult<ResponceDTO<ProcessSampleDTO>>> UpdateProcessSample(ProcessSampleDTO sample)
-        {
-            ProcessSample processSample = mapper.Map<ProcessSample>(sample);
-            processSampleRepository.Update(processSample);
-            if(await processSampleRepository.SaveAllAsync())
-            {
-                sample.Id = processSample.Id;
-                return new ResponceDTO<ProcessSampleDTO>
-                {
-                    code = 200,
-                    result = "success",
-                    resultObject = sample
-                };
-            }
-            return new ResponceDTO<ProcessSampleDTO>
-                {
-                    code = 500,
-                    result = "error occured during saving",
-                    resultObject = sample
-                };
+            var processDTO =  await _processEntityService.AddAsync(process);
+            await _processExecutorService.BuildProcess(processDTO.Id);
+            return processDTO;
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<ActionResult> DeleteProcessSample(Guid Id)
+        [HttpPut]
+        public async Task<ProcessDTO> UpdateProcess(ProcessDTO process)
         {
-            var process = await processSampleRepository.GetProcessSampleByIdAsync(Id);
-            if(process == null)
-                return Ok();
-            processSampleRepository.Delete(process);
-            if(await processSampleRepository.SaveAllAsync())
-                return Ok();
-            return BadRequest("One or more error occured");
+            var processDTO = await _processEntityService.UpdateAsync(process);
+            await _processExecutorService.BuildProcess(processDTO.Id);
+            return processDTO;
         }
-        
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProcess(int id)
+        {
+            await _processEntityService.DeleteAsync(id);
+            return Ok();
+        }
     }
 }
