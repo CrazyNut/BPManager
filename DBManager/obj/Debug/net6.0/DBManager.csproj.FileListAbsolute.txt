@@ -1,5 +1,0 @@
-C:\Users\Asus\source\repos\BPManager\DBManager\obj\Debug\net6.0\DBManager.csproj.AssemblyReference.cache
-C:\Users\Asus\source\repos\BPManager\DBManager\obj\Debug\net6.0\DBManager.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Asus\source\repos\BPManager\DBManager\obj\Debug\net6.0\DBManager.AssemblyInfoInputs.cache
-C:\Users\Asus\source\repos\BPManager\DBManager\obj\Debug\net6.0\DBManager.AssemblyInfo.cs
-C:\Users\Asus\source\repos\BPManager\DBManager\obj\Debug\net6.0\DBManager.csproj.CoreCompileInputs.cache
