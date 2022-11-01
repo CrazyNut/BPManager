@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Services;
 
 namespace API.Validation
 {
@@ -13,9 +14,7 @@ namespace API.Validation
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             try {
-                var service = (IProcessElementTypesService)validationContext
-                             .GetService(typeof(IProcessElementTypesService));
-                Dictionary<string, string> properties = service.GetProcessElementTypes();
+                Dictionary<string, string> properties = ProcessElementTypesService.GetTypes();
                 // Since NoneSuch does not exist in this assembly, GetType throws a TypeLoadException.
                 Type myType2 = Type.GetType(properties[(string)value], true);
              return ValidationResult.Success;

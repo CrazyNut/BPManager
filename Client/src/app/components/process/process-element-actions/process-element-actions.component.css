@@ -1,0 +1,23 @@
+.draggableActions{
+    z-index: 9999;
+}
+.draggableActions .btn:hover{
+    border: none!important;
+    outline: 0!important;
+    box-shadow: none!important;
+}
+.draggableActions .btn:not(:hover){
+    border: none!important;
+    outline: 0!important;
+    box-shadow: none!important;
+}
+
+.row{
+    margin: 0;
+}
+
+.col-lg-6{
+    text-align: center;
+    padding: 0;
+    width: auto;
+}

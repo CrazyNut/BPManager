@@ -1,0 +1,61 @@
+<div class="draggableActions" style="position: absolute;" 
+[style]="{
+    'display': data.ActiveElement ? 'inline' : 'none',
+    'transform': 'translate3d('+data.Position.x+'px,'+data.Position.y+'px,0)'}">
+    <div class="row" >
+        <ng-container *ngIf="data.Type === 'Element'">
+            <ng-container *ngFor="let item of availibleElementActions; let i = index;">
+                <div *ngIf="!item.disableFor.includes(data.ActiveElementType)" class="col-lg-6">
+                    <button 
+                    (click)="onActionClicked('Element',item.actionName)" 
+                    class="btn " 
+                    style="color: black;">
+                    <i class="{{item.Icon}} fa-lg"></i>
+                </button> 
+                </div>
+                        
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="data.Type === 'Line'">
+            <div class="col-lg-6">
+                <button (click)="onActionClicked('Line','delete')" class="btn" style="color: black;">
+                    <i class="bpmn-icon-trash fa-lg"></i>
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+
+  <!-- <table>
+    <tbody>
+      <ng-container *ngIf="data.Type === 'Element'">
+          <ng-container *ngFor="let item of availibleElementActions; let i = index;">
+                  <tr *ngIf="i%2 === 0">
+                      <button 
+                          (click)="onActionClicked('Element',item.actionName)" 
+                          class="btn " 
+                          style="color: black;">
+                          <i class="{{item.Icon}} fa-lg"></i>
+                      </button> 
+                      <button *ngIf="availibleElementActions[i+1]" 
+                          (click)="onActionClicked('Element',availibleElementActions[i+1].actionName)" 
+                          class="btn " 
+                          style="color: black;">
+                          <i class="{{availibleElementActions[i+1].Icon}} fa-lg"></i>
+                      </button>
+                  </tr>
+          </ng-container>
+      </ng-container>
+      <ng-container *ngIf="data.Type === 'Line'">
+          <tr>
+              <button (click)="onActionClicked('Line','change')" class="btn" style="color: black;">
+              <i class="bpmn-icon-connection  fa-lg"></i>
+              </button> 
+              <button (click)="onActionClicked('Line','delete')" class="btn" style="color: black;">
+              <i class="bpmn-icon-trash fa-lg"></i>
+              </button>
+          </tr>
+      </ng-container>
+    </tbody>
+  </table> -->

@@ -8,11 +8,13 @@
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "app", 
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": true, 
+            "aot": true,
             "outputPath": "dist/client",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -23,13 +25,22 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/font-awesome/css/font-awesome.css",
-              "src/styles.css"
+              "./node_modules/bpmn-font/dist/css/bpmn.css",
+              "./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/styles.css",
+              "src/assets/css/sb-admin-2.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/leader-line/leader-line.min.js",
+              "src/assets/vendor/jquery/jquery.min.js",
+              "src/assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
+              "src/assets/vendor/jquery-easing/jquery.easing.min.js",
+              "src/assets/js/sb-admin-2.min.js"
+            ]
           },
-          "configurations": {
+          "configurations": { 
             "production": {
               "budgets": [
                 {
@@ -65,6 +76,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
+            "en-US": { 
+              "browserTarget": "Client:build:en-US" 
+            }, 
+            "ru": { 
+              "browserTarget": "Client:build:ru" 
+            },
             "production": {
               "browserTarget": "Client:build:production"
             },
@@ -92,6 +109,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []

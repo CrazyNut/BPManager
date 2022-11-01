@@ -13,7 +13,9 @@ namespace API.Services
     {
         private readonly Dictionary<string, string> _types;
         private readonly Dictionary<string, List<ProcessParamDTO>> _processParams;
+        private readonly Dictionary<string, string> _processElementIcons;
         private readonly IStringLocalizer<ProcessElementTypesService> _localizer;
+        private readonly List<ProcessTypeDTO> _processTypeList;
 
         public ProcessElementTypesService(
             IStringLocalizer<ProcessElementTypesService> localizer)
@@ -21,11 +23,30 @@ namespace API.Services
             _localizer = localizer;
             _types = GetTypes();
             _processParams = GetTypeParams();
+
+            _processElementIcons = new Dictionary<string, string>();
+            _processElementIcons.Add("StartProcessElement", "bpmn-icon-start-event-none");
+            _processElementIcons.Add("EndProcessElement", "bpmn-icon-end-event-none");
+            _processElementIcons.Add("SumProcessElement", "bpmn-icon-intermediate-event-catch-parallel-multiple");
+
+            _processTypeList = new List<ProcessTypeDTO>();
+            foreach (var item in _types)
+            {
+                string icon = "";
+                _processElementIcons.TryGetValue(item.Key, out icon);
+                _processTypeList.Add(new ProcessTypeDTO()
+                {
+                    Name = _localizer[item.Key],
+                    Type = item.Key,
+                    Icon = icon,
+                    Params = _processParams[item.Key]
+                });
+            }
         }
 
-        public Dictionary<string, string> GetProcessElementTypes()
+        public List<ProcessTypeDTO> GetProcessElementTypes()
         {
-            return _types;
+            return _processTypeList;
         }
 
         public static Dictionary<string,string> GetTypes()

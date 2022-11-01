@@ -23,9 +23,9 @@ namespace API.Controllers
         }
 
         [HttpGet("types")]
-        public IEnumerable<string> GetProcessElementTypes()
+        public IEnumerable<ProcessTypeDTO> GetProcessElementTypes()
         {
-            return _processElementTypesService.GetProcessElementTypes().Keys.ToArray();
+            return _processElementTypesService.GetProcessElementTypes();
         }
 
         [HttpGet("typeParams")]

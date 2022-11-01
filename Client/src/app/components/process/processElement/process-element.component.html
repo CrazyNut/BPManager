@@ -1,0 +1,29 @@
+<div class="process-element" 
+  #draggable
+  id = "{{data.Code}}"
+  (pointerenter) = "pointerenterA($event)"
+  (pointerdown) = "pointerdownA($event)"
+  (pointerup) = "pointerupA($event)"
+  (pointerout) = "pointeroutA($event)"
+  (pointermove) = "pointermoveA($event)"
+  [style]="{'transform': 'translate3d('+data.Position.x+'px,'+data.Position.y+'px,0)'}">
+  
+    <button class="btn btn-circle" style="border-color: black; color:black; width: 4rem; height: 4rem;" 
+    [style]="
+    {
+      'border-color':  data.Type === 'StartProcessElement' ? 'green' : 
+                        data.Type === 'EndProcessElement' ? 'red': 'black',
+      'color' :       data.Type === 'StartProcessElement' ? 'green' : 
+                        data.Type === 'EndProcessElement' ? 'red': 'black',
+      'cursor': data.Cursor
+        }">
+      <i class="{{data.Icon}} fa-4x "></i>
+    </button>
+</div>
+
+<!--   
+  cdkDrag 
+  id = "{{id}}"
+  #startingElement  
+  [cdkDragFreeDragPosition]="dragPosition"
+  (cdkDragEnded)="dropped($event)"> -->

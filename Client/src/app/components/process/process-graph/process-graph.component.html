@@ -1,0 +1,111 @@
+<div class="process_graph_actions position-absolute card shadow py-2" style="max-width: 15%;">
+  <div class="card-body">
+    <table class="">
+      <tbody *ngIf="process">
+        <tr class="border-bottom-secondary mb-2">
+          <button (click)="returnToCenter()" class="btn btn-light mb-2">
+            <span class="icon text-white-50">
+                <i style="color: black;" class="fas fa-compress-arrows-alt fa-2x"></i>
+            </span>
+          </button>
+        </tr>
+        <ng-container *ngFor="let item of process.availibleProcessElements; let i=index">
+          <tr *ngIf="i%2 === 0">
+            <button (click)="addChild(item.type, item.icon)" class="btn btn-light">
+              <span class="icon text-white-50">
+                  <i style="color: black;" class="{{item.icon}} fa-2x"></i>
+              </span>
+            </button>
+            <button *ngIf="process.availibleProcessElements[i+1]" 
+              (click)="addChild(process.availibleProcessElements[i+1].type,process.availibleProcessElements[i+1].icon)" 
+              class="btn btn-light">
+              <span class="icon text-black-50">
+                  <i class="{{process.availibleProcessElements[i+1].icon}} fa-2x"></i>
+              </span>
+            </button>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+     <!-- <form [formGroup]="formdata" (ngSubmit)="process.DeleteElement('EndProcessElement1')" > 
+          <input type="text" name="first" placeholder="first" formControlName = "first">  
+          <input type="text" name="second" placeholder="second" formControlName = "second"> 
+          <br/> 
+          <input type="submit" value="submit"> 
+        </form> -->
+  </div>
+</div>
+
+<app-process-element-actions [data]="processElementActionsData" (actionClicked)="actionClicked($event)"></app-process-element-actions>
+<div id="processParent"> 
+    <div 
+    (pointerenter) = "pointerenterA($event)"
+    (pointerdown) = "pointerdownA($event)"
+    (pointermove) = "pointermoveA($event)"
+    (contextmenu) = "contextmenuA($event)"
+    id="processPanelBorder" 
+    #processPanelBorder >
+      <div id="lineOutline" class="border border-dark  border-2 rounded-2"
+      [style]="{
+          'display': lineBorderData.ActiveElement ? 'inline' : 'none',
+          'left' : lineBorderData.Position.x+'px',
+          'top' : lineBorderData.Position.y+'px',
+          'width' : lineBorderData.Size.x+'px',
+          'height' : lineBorderData.Size.y + 'px'}"></div>
+
+      <div #lineStart id="lineStart" 
+        (pointerdown)= "lineStartClicked($event)" 
+        [style]="{
+          'display' : 'none',
+          'visibility': lineStartData.ActiveElement ? 'visible' : 'hidden',
+          'left' : lineStartData.Position.x+'px',
+          'top' : lineStartData.Position.y+'px'
+        }">
+          <i class="fas fa-circle"></i>
+      </div>
+
+      <div #lineEnd id="lineEnd"
+        (pointerdown)= "lineEndClicked($event)" 
+        [style]="{
+          'visibility': lineEndData.ActiveElement ? 'visible' : 'hidden',
+          'left' : lineEndData.Position.x+'px',
+          'top' : lineEndData.Position.y+'px'
+        }">
+          <i class="fas fa-circle"></i>
+      </div>
+      <div
+        #processPanel 
+        id="processPanel" 
+        style="position: absolute; z-index: 100;">
+          
+          <div #LinePrototypeEnd
+            id="LinePrototypeEnd"
+            [style]="{'transform': 'translate3d('+linePrototypeData.position.x+'px,'+linePrototypeData.position.y+'px,0)'}"></div>
+          <ng-container 
+            *ngIf="process">
+            <ng-container *ngFor="let item of process.elementsData; let i = index;">
+              <app-process-element 
+                [(data)]="process.elementsData[i]" 
+                (droppedRequest)="draggableDropped($event)" 
+                (clickRequest)= "draggableClicked($event)" 
+                (moveRequest) = "draggableMoved($event)"
+                (hoverRequest) = "hoverRequest($event)"
+                [scrollK] = "draggableSpeedK" 
+                (elementOut) = "setElement($event)">
+              </app-process-element>
+            </ng-container>
+          </ng-container>
+      </div>
+     
+      <div id="processLines" 
+      #processLines
+      [style]="{
+        'left' : processLinesPos.x + 'px',
+        'top' : processLinesPos.y + 'px'
+      }"></div>
+      
+    </div>
+    
+</div>
+
+  

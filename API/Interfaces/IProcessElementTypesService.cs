@@ -6,7 +6,7 @@ namespace API.ProcessExecutor.Interfaces
 {
     public interface IProcessElementTypesService
     {
-        public Dictionary<string,string> GetProcessElementTypes();
+        public List<ProcessTypeDTO> GetProcessElementTypes();
         public Dictionary<string, List<ProcessParamDTO>> GetProcessElementsParamets();
         public List<ProcessParamDTO> GetProcessElementParamets(string processElementType);
         public BaseProcessElement InstantiateProcessElement(string processElementType);

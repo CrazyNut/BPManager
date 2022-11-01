@@ -37,7 +37,7 @@ public class WeatherForecastController : BaseContoller
     [HttpGet("getAbstracts")]
     public ActionResult<string> GetAbstracts()
     {
-        Dictionary<string,string> types = processElementTypesService.GetProcessElementTypes();
+        var types = processElementTypesService.GetProcessElementTypes();
         string s = JsonSerializer.Serialize(types);
         return s;
 

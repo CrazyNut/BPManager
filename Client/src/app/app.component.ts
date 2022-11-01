@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
 
+import {  Component} from '@angular/core';
+
+declare var LeaderLine: any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class AppComponent {
   title = 'Client';
+
+  constructor() {
+  }
 }
